@@ -41,10 +41,15 @@ async function decipher() {
             }
         }
 
-        // parse the number and add to sum
-        sum += Number(cvalue);
+        // check to see if cvalue has a length of one if so add it to itself
+        if (cvalue.length == 1) {
+            cvalue += cvalue;
+        }
 
         console.log(cvalue);
+
+        // parse the number and add to sum
+        sum += Number(cvalue);
     }
 
     console.log(sum);
