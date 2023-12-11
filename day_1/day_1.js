@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 
-const fileName = "input.txt";
+const fileName = "input_eng.txt";
 const filePath = `/code/aoc/day_1/${fileName}`;
 
 // get input data from files
@@ -53,9 +53,10 @@ async function decipher() {
     console.log(sum);
 }
 
-// console.time("deciphering");
-// decipher();
-// console.timeEnd("deciphering");
+console.time("deciphering");
+decipher();
+console.timeEnd("deciphering");
+
 const digitsMap = new Map([
     ["one", 1],
     ["two", 2],
@@ -105,8 +106,9 @@ async function decipherPartTwo() {
 
     for (let i = 0; i < digitArr.length; i++) {
         sum += digitArr[i];
-        console.log(`Index: ${i}, Current Sum: ${sum} with a values ${digitArr[i]}`);
     }
+
+    console.log(sum);
 }
 
 console.time("deciphering");
