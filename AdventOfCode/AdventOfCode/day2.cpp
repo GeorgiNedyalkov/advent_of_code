@@ -5,9 +5,6 @@
 #include <string>
 #include <vector>
 
-// Advent of code 2020
-// Find 50 coins
-
 std::vector<std::string> getInputLines()
 {
 	std::vector<std::string> lines;
