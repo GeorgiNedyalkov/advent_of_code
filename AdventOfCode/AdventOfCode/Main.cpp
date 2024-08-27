@@ -5,46 +5,103 @@
 #include <vector>
 #include "utils.h"
 
-// Day 3.
-// count all the tree "#" you encounter using the moving pattern - right 3 down 1 - until you reach the end.
-
-
-int checkSlope(int right, int down)
+std::vector<std::string> splitString(std::string inputLine, char delimiter = ' ')
 {
-	int treeIndex = 0;
-	int treeCount = 0;
+	std::vector<std::string> splitStrings;
+	std::istringstream ss(inputLine);
+	std::string currentLine;
 
-	std::vector<std::string> inputLines = getInput("input.txt");
-	for (int row = down; row < inputLines.size(); row += down)
+	while (std::getline(ss, currentLine, delimiter))
 	{
-		treeIndex += right;
-
-		// if we go out of the row start from the beginning
-		if (treeIndex >= inputLines[row].size())
-		{
-			treeIndex -= inputLines[row].size();
-		}
-
-		if (inputLines[row][treeIndex] == '#')
-		{
-			treeCount++;
-		}
+		splitStrings.push_back(currentLine);
 	}
-	return treeCount;
+
+	return splitStrings;
 }
+
+std::vector<std::string> extractPassportKeys(std::string passportData)
+{
+	std::vector<std::string> passportKeyValues = splitString(passportData);
+	std::vector<std::string> passportKeys;
+
+	for (int i = 0; i < passportKeyValues.size(); i++)
+	{
+		std::vector<std::string> passportKeysSplit = splitString(passportKeyValues[i], ':');
+		passportKeys.push_back(passportKeysSplit[0]);
+	}
+
+	return passportKeys;
+}
+
+
+bool isValidPassport(std::vector<std::string> passport)
+{
+	std::vector<std::string> requiredFields = { "byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid" }; // cid is not necessary
+
+	// we need seven fields
+
+	if (passport.size() < requiredFields.size() - 1)
+	{
+		return false;
+	}
+
+
+
+	return true;
+}
+
 
 int main()
 {
-	std::vector<std::vector<int>>  slopes = { {1,1}, {3,1 }, {5,1}, {7, 1}, {1, 2} };
-	long long int product = 1;
+	// Get the data
+	std::ifstream passportDataStream("test_input.txt");
+	std::vector<std::string> passports;
+	std::string currentPassportData;
 
-	for (auto slope : slopes)
+	if (passportDataStream.is_open())
 	{
-		int treeCount = checkSlope(slope[0], slope[1]);
-		product *= treeCount;
+		std::string currentLine;
+		while (std::getline(passportDataStream, currentLine))
+		{
+			if (currentLine.empty())
+			{
+				passports.push_back(currentPassportData);
+				currentPassportData.clear();
+			}
+			else
+			{
+				if (!currentPassportData.empty())
+				{
+					currentPassportData += " ";
+				}
+				currentPassportData += currentLine;
+			}
+		}
+
+		if (!currentPassportData.empty())
+		{
+			passports.push_back(currentPassportData);
+		}
+	}
+	else
+	{
+		std::cout << "Error: couldn't not get data from file" << std::endl;
 	}
 
-	std::cout << product << std::endl;
+	int validPasswords = 0;
+	for (auto passport : passports)
+	{
+		std::vector<std::string> passportKeys = extractPassportKeys(passport);
+
+		if (isValidPassport(passportKeys))
+		{
+			validPasswords++;
+		}
+	}
+
+	std::cout << validPasswords << std::endl;
 
 	return 0;
 }
+
+

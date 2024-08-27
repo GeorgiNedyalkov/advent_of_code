@@ -29,3 +29,27 @@ else
     std::cout << "Error: coudn't open file" << std::endl;
 }
 ```
+
+## How to split a string into a vector?
+
+1. Include `sstream`
+2. Create a `istringstream` stream and a string to get the current string
+3. Use `std::getline` by passing the `istringstream`, `current string` and a `delimiter`.
+
+```cpp
+#include <sstream>
+
+void printSplitString()
+{
+    std::string inputLine = "Apples Oranges";
+    std::istringstream ss (inputline);
+    std::string currentLine;
+    char delimiter = '';
+
+    while(std::getline(ss, currentline, delimiter))
+    {
+        std::cout << currentLine << std::endl;
+    }
+}
+
+```

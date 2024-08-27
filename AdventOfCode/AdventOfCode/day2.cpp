@@ -26,7 +26,6 @@ std::vector<std::string> getInputLines()
 	return lines;
 }
 
-
 std::vector<std::string> splitLine(std::string line, char delimiter)
 {
 	std::istringstream ss(line);

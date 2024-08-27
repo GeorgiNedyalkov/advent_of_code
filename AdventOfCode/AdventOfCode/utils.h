@@ -63,12 +63,18 @@ void printArrayElements(std::string arr)
 }
 
 
-void printArrayElements(std::vector<int> arr)
-{
+void printArrayElements(std::vector<int> arr) {
 	for (int i = 0; i < arr.size(); i++)
 	{
 		std::cout << arr[i] << '\n';
 	}
 }
 
+
+void printArrayElements(std::vector<std::string> arr) {
+	for (int i = 0; i < arr.size(); i++)
+	{
+		std::cout << arr[i] << '\n';
+	}
+}
 
