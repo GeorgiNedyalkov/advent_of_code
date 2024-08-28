@@ -39,7 +39,7 @@ else
 ```cpp
 #include <sstream>
 
-void printSplitString()
+void splitString()
 {
     std::string inputLine = "Apples Oranges";
     std::istringstream ss (inputline);
