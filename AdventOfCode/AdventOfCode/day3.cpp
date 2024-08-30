@@ -1,9 +1,10 @@
+//
 //#include <vector>
 //#include <string>
 //#include "utils.h"
 //
-//// Day 3.
-//// count all the tree "#" you encounter using the moving pattern - right 3 down 1 - until you reach the end.
+// Day 3.
+// count all the tree "#" you encounter using the moving pattern - right 3 down 1 - until you reach the end.
 //
 //
 //int checkSlope(int right, int down)
@@ -16,7 +17,7 @@
 //	{
 //		treeIndex += right;
 //
-//		// if we go out of the row start from the beginning
+//		 if we go out of the row start from the beginning
 //		if (treeIndex >= inputLines[row].size())
 //		{
 //			treeIndex -= inputLines[row].size();
