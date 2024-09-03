@@ -1,4 +1,5 @@
 #include <map>
+#include <queue>
 #include <set>
 #include <algorithm>
 #include <iostream>
@@ -10,7 +11,7 @@
 #include <unordered_set>
 #include "utils.h"
 
-static std::vector<std::string> splitString(std::string str, char delimiter)
+static std::vector<std::string> splitString(std::string str, char delimiter = ' ')
 {
 	std::vector<std::string> splitVector;
 	std::stringstream ss(str);
@@ -26,7 +27,7 @@ static std::vector<std::string> splitString(std::string str, char delimiter)
 static std::vector<std::string> getLines(std::string filename)
 {
 	std::string line;
-	std::ifstream inputStream("input.txt");
+	std::ifstream inputStream(filename);
 	std::vector<std::string> lines;
 	if (inputStream.is_open())
 	{
@@ -43,62 +44,60 @@ static std::vector<std::string> getLines(std::string filename)
 	return lines;
 }
 
-
-static bool foundBag(std::string line, std::string bagToFind)
+struct Node
 {
-	std::size_t found = line.find(bagToFind);
-	if (found != std::string::npos)
+	Node(std::string name)
+		: bag_name(name)
 	{
-		std::vector<std::string> splitLine = splitString(line, ' ');
-		std::string currentBag = splitLine[0] + " " + splitLine[1];
-
-		if (currentBag != bagToFind)
-		{
-			return true;
-		}
 	}
 
-	return false;
+	std::string bag_name;
+	std::vector<Node*> m_bagsThatHoldMe;
+};
+
+void add_bag_children(Node* node, std::vector<std::string>& lines)
+{
+	for (std::string& line : lines)
+	{
+		if (line.find(node->bag_name) != std::string::npos)
+		{
+			std::vector<std::string> splitLine = splitString(line);
+			std::string currentBag = splitLine[0] + " " + splitLine[1];
+
+			if (currentBag != node->bag_name)
+			{
+				Node* bag = new Node(currentBag);
+				node->m_bagsThatHoldMe.emplace_back(bag);
+			}
+		}
+	}
 }
 
 int main()
 {
-	std::vector<std::string> bagsThatHoldShinyGoldBag;
-	std::string bagToFind = "shiny gold bag";
-	int countBags = 0;
-
 	std::vector<std::string> lines = getLines("input.txt");
+	std::set<std::string> nodeSet;
 
-	for (auto l : lines)
+	Node* shinyGold = new Node("shiny gold");
+
+	std::queue<Node*> q;
+	q.emplace(shinyGold);
+
+	while (!q.empty())
 	{
+		Node* curr = q.front();
+		q.pop();
 
-		if (foundBag(l, bagToFind))
+		add_bag_children(curr, lines);
+
+		for (auto& node : curr->m_bagsThatHoldMe)
 		{
-			std::vector<std::string> splitLine = splitString(l, ' ');
-			std::string currentBag = splitLine[0] + " " + splitLine[1];
-			bagsThatHoldShinyGoldBag.push_back(currentBag);
-			std::cout << l << std::endl;
-			countBags++;
+			q.emplace(node);
+			nodeSet.emplace(node->bag_name);
 		}
 	}
 
-	int count = 0;
-	for (auto l : lines)
-	{
-		count++;
-		std::cout << count << " " << l << std::endl;
-
-		for (auto bag : bagsThatHoldShinyGoldBag)
-		{
-			//if (foundBag(l, bag))
-			//{
-			//	std::vector<std::string> splitLine = splitString(l, ' ');
-			//	std::string currentBag = splitLine[0] + " " + splitLine[1];
-			//	bagsThatHoldShinyGoldBag.push_back(bag);
-			//	countBags++;
-			//}
-		}
-	}
+	std::cout << nodeSet.size() << std::endl;
 
 	return 0;
 }
