@@ -11,95 +11,59 @@
 #include <unordered_set>
 #include "utils.h"
 
-static std::vector<std::string> splitString(std::string str, char delimiter = ' ')
+// Big O(n)
+int day_1_part_one()
 {
-	std::vector<std::string> splitVector;
-	std::stringstream ss(str);
+	std::vector<std::string> lines = Utils::getLines("input.txt");
 
-	while (std::getline(ss, str, delimiter))
+	int previous_depth = std::stoi(lines[0]);
+	int depth_increase_count = 0;
+
+	for (int i = 1; i < lines.size(); i++)
 	{
-		splitVector.push_back(str);
+		int current_depth = std::stoi(lines[i]);
+		if (previous_depth < current_depth)
+		{
+			depth_increase_count++;
+		}
+
+		previous_depth = current_depth;
 	}
 
-	return splitVector;
+	return depth_increase_count;
 }
 
-static std::vector<std::string> getLines(std::string filename)
+// Sliding window
+int day_2_part_one()
 {
-	std::string line;
-	std::ifstream inputStream(filename);
-	std::vector<std::string> lines;
-	if (inputStream.is_open())
+	std::vector<std::string> lines = Utils::getLines("input.txt");
+
+	// calculate the sum of the first three items
+	int previous_sum = 0;
+	int increases_count = 0;
+	for (int i = 0; i < lines.size() - 3; i++)
 	{
-		while (std::getline(inputStream, line))
+		int current_sum = 0;
+		for (int j = i; j < i + 3; j++)
 		{
-			lines.push_back(line);
+			current_sum += std::stoi(lines[j]);
 		}
-	}
-	else 
-	{
-		std::cout << "Error: couldn't open file" << std::endl;
-	}
 
-	return lines;
-}
-
-struct Node
-{
-	Node(std::string name)
-		: bag_name(name)
-	{
-	}
-
-	std::string bag_name;
-	std::vector<Node*> m_bagsThatHoldMe;
-};
-
-void add_bag_children(Node* node, std::vector<std::string>& lines)
-{
-	for (std::string& line : lines)
-	{
-		if (line.find(node->bag_name) != std::string::npos)
+		if (previous_sum < current_sum)
 		{
-			std::vector<std::string> splitLine = splitString(line);
-			std::string currentBag = splitLine[0] + " " + splitLine[1];
-
-			if (currentBag != node->bag_name)
-			{
-				Node* bag = new Node(currentBag);
-				node->m_bagsThatHoldMe.emplace_back(bag);
-			}
+			increases_count++;
 		}
-	}
-}
 
-int main()
-{
-	std::vector<std::string> lines = getLines("input.txt");
-	std::set<std::string> nodeSet;
-
-	Node* shinyGold = new Node("shiny gold");
-
-	std::queue<Node*> q;
-	q.emplace(shinyGold);
-
-	while (!q.empty())
-	{
-		Node* curr = q.front();
-		q.pop();
-
-		add_bag_children(curr, lines);
-
-		for (auto& node : curr->m_bagsThatHoldMe)
-		{
-			q.emplace(node);
-			nodeSet.emplace(node->bag_name);
-		}
+		previous_sum = current_sum;
 	}
 
-	std::cout << nodeSet.size() << std::endl;
+	std::cout << increases_count << std::endl;
 
 	return 0;
 }
 
+int main()
+{
+	day_2_part_one();
+}
 

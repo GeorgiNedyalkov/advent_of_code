@@ -6,7 +6,7 @@
 #include <fstream>
 
 namespace Utils {
-	std::vector<std::string> getInput(std::string filename)
+	std::vector<std::string> getLines(std::string filename)
 	{
 		std::ifstream inputFileStream(filename);
 		std::string currentLine;
