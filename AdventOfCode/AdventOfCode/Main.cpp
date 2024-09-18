@@ -30,10 +30,10 @@ int binary_to_decimal(std::string binary_number)
 	return decimal;
 }
 
-int main()
+
+int part_1()
 {
 	std::vector<std::string> lines = Utils::getLines("input.txt");
-
 	int count_0 = 0;
 	int count_1 = 0;
 
@@ -88,5 +88,110 @@ int main()
 
 	std::cout << i_gamma_rate * i_epilson_rate << std::endl;
 
+	return i_gamma_rate * i_epilson_rate;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+std::vector<std::string> find_oxygen_rating(std::vector<std::string>& lines, int position)
+{
+	std::vector<std::string> zero_bit_numbers;
+	std::vector<std::string> one_bit_numbers;
+
+	for (int i = 0; i < lines.size(); i++)
+	{
+		char current_bit = lines[i][position];
+
+		if (current_bit == '0')
+		{
+			zero_bit_numbers.emplace_back(lines[i]);
+		}
+		else if (current_bit == '1')
+		{
+			one_bit_numbers.emplace_back(lines[i]);
+		}
+	}
+
+	if (zero_bit_numbers.size() > one_bit_numbers.size())
+	{
+		lines = zero_bit_numbers;
+	}
+	else if (zero_bit_numbers.size() <= one_bit_numbers.size())
+	{
+		lines = one_bit_numbers;
+	}
+
+	return lines;
+}
+
+std::vector<std::string> find_c02_rating(std::vector<std::string>& lines, int position)
+{
+	std::vector<std::string> zero_bit_numbers;
+	std::vector<std::string> one_bit_numbers;
+
+	for (int i = 0; i < lines.size(); i++)
+	{
+		char current_bit = lines[i][position];
+
+		if (current_bit == '0')
+		{
+			zero_bit_numbers.emplace_back(lines[i]);
+		}
+		else if (current_bit == '1')
+		{
+			one_bit_numbers.emplace_back(lines[i]);
+		}
+	}
+
+	if (zero_bit_numbers.size() > one_bit_numbers.size())
+	{
+		lines = one_bit_numbers;
+	}
+	else if (zero_bit_numbers.size() <= one_bit_numbers.size())
+	{
+		lines = zero_bit_numbers;
+	}
+
+	return lines;
+}
+
+int main()
+{	
+	std::vector<std::string> lines = Utils::getLines("input.txt");
+	std::vector<std::string> oxygen_generator_rating(lines);
+	std::vector<std::string> co2_scrubber_rating(lines);
+
+	size_t number_length = lines[0].size();
+
+	int position = 0;
+	while (oxygen_generator_rating.size() > 1)
+	{
+		find_oxygen_rating(oxygen_generator_rating, position);
+		position++;
+	}
+
+	position = 0;
+	while (co2_scrubber_rating.size() > 1)
+	{
+		find_c02_rating(co2_scrubber_rating, position);
+		position++;
+	}
+
+	int oxygen_rating = binary_to_decimal(oxygen_generator_rating[0]);
+	int co2_rating = binary_to_decimal(co2_scrubber_rating[0]);
+
+	std::cout << oxygen_rating * co2_rating << std::endl;
+
+	return 0;
 }
 
