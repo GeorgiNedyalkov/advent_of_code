@@ -1,2 +1,5 @@
 ﻿  Main.cpp
+C:\dev\advent_of_code\AdventOfCode\AdventOfCode\Main.cpp(20,13): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\dev\advent_of_code\AdventOfCode\AdventOfCode\Main.cpp(26,23): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+C:\dev\advent_of_code\AdventOfCode\AdventOfCode\Main.cpp(40,13): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   AdventOfCode.vcxproj -> C:\dev\advent_of_code\AdventOfCode\x64\Debug\AdventOfCode.exe
