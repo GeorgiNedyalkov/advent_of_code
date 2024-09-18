@@ -11,59 +11,93 @@
 #include <unordered_set>
 #include "utils.h"
 
-// Big O(n)
-int day_1_part_one()
-{
-	std::vector<std::string> lines = Utils::getLines("input.txt");
+namespace Day1_2021 {
 
-	int previous_depth = std::stoi(lines[0]);
-	int depth_increase_count = 0;
-
-	for (int i = 1; i < lines.size(); i++)
+	static int part_1()
 	{
-		int current_depth = std::stoi(lines[i]);
-		if (previous_depth < current_depth)
+		std::string line;
+		std::ifstream ss("input.txt");
+
+		if (!ss.is_open())
 		{
-			depth_increase_count++;
+			std::cout << "Error: couldn't open file" << std::endl;
 		}
 
-		previous_depth = current_depth;
+		int posX = 0;
+		int posY = 0;
+
+		while (std::getline(ss, line))
+		{
+			char command = line.front();
+			int speed = line.back() - '0'; // convert the char digit to a integer
+
+			switch (command)
+			{
+			case 'f':
+				posX += speed;
+				break;
+			case 'b':
+				posX -= speed;
+				break;
+			case 'u':
+				posY -= speed;
+				break;
+			case 'd':
+				posY += speed;
+				break;
+			}
+		}
+
+		return posX * posY;
 	}
 
-	return depth_increase_count;
-}
-
-// Sliding window
-int day_2_part_one()
-{
-	std::vector<std::string> lines = Utils::getLines("input.txt");
-
-	// calculate the sum of the first three items
-	int previous_sum = 0;
-	int increases_count = 0;
-	for (int i = 0; i < lines.size() - 3; i++)
+	static int part_2()
 	{
-		int current_sum = 0;
-		for (int j = i; j < i + 3; j++)
+		std::string line;
+		std::ifstream ss("input.txt");
+
+		if (!ss.is_open())
 		{
-			current_sum += std::stoi(lines[j]);
+			std::cout << "Error: couldn't open file" << std::endl;
 		}
 
-		if (previous_sum < current_sum)
+		int posX = 0;
+		int posY = 0;
+		int aim = 0;
+
+		while (std::getline(ss, line))
 		{
-			increases_count++;
+			char command = line.front();
+			int speed = line.back() - '0'; // convert the char digit to a integer
+
+			switch (command)
+			{
+			case 'f':
+				posX += speed;
+				posY += aim * speed;
+				break;
+			case 'b':
+				posX -= speed;
+				posY -= aim * speed;
+				break;
+			case 'u':
+				aim -= speed;
+				break;
+			case 'd':
+				aim += speed;
+				break;
+			}
 		}
 
-		previous_sum = current_sum;
+		return posX * posY;
 	}
 
-	std::cout << increases_count << std::endl;
-
-	return 0;
 }
 
 int main()
 {
-	day_2_part_one();
+	std::cout << Day1_2021::part_1() << std::endl;
+	std::cout << Day1_2021::part_2() << std::endl;
 }
+
 
